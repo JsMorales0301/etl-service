@@ -1,0 +1,31 @@
+# Entorno virtual de Python (venv)
+venv/
+.venv/
+env/
+
+# Variables de entorno
+.env
+.env.local
+.env*.local
+
+# Dependencias de Poetry (puedes decidir si ignorar o no poetry.lock)
+poetry.lock
+
+# Cache y archivos generados por Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de desarrollo y pruebas
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Configuraciones de IDE
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
