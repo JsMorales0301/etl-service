@@ -1,5 +1,6 @@
 from src.domain.interfaces.rule import Rule
 from typing import Any
+import time
 from .rules.documento_repetido import DocumentoRepetido
 from .rules.doble_militancia import DobleMilitancia
 from .rules.documento_sin_letras import DocumentoSinLetras
@@ -24,6 +25,9 @@ class CandidatesStrategy:
         ]
 
     def run(self, df, context: dict[str, Any] = None):
+        start = time.time()
         for rule in self.rules:
             rule.apply(df, context)
+        end = time.time()
+        print(f"Tiempo de ejecución: {end - start:.6f} segundos")
         return df
