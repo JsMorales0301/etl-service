@@ -14,16 +14,11 @@ class DatabaseConfig:
 
     @property
     def connection_string(self) -> str:
-        """Genera la cadena de conexión para SQLAlchemy."""
         return f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
 
     @classmethod
     def from_env(cls) -> 'DatabaseConfig':
-        """
-        Crea una instancia de configuración desde variables de entorno.
-        Las variables deben estar en un archivo .env o en el sistema.
-        """
-        load_dotenv()  # Carga variables desde .env si existe
+        load_dotenv()
 
         return cls(
             host=os.getenv('DB_HOST', 'localhost'),
@@ -36,10 +31,6 @@ class DatabaseConfig:
 
     @classmethod
     def from_dict(cls, config_dict: dict) -> 'DatabaseConfig':
-        """
-        Crea una instancia de configuración desde un diccionario.
-        Útil para testing o configuración programática.
-        """
         return cls(
             host=config_dict.get('host', 'localhost'),
             port=int(config_dict.get('port', 5433)),
