@@ -1,4 +1,5 @@
 from src.domain.interfaces.candidate_repository import CandidateRepository
+from src.infrastructure.config.database_config import DatabaseConfig
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -6,16 +7,17 @@ import pandas as pd
 
 class CandidateDBRepository(CandidateRepository):
 
-    def __init__(self, connection_string: str):
-        self.engine = create_engine(connection_string)
+    def __init__(self, config: DatabaseConfig):
+        self.config = config
+        self.engine = create_engine(config.connection_string)
 
     def get_corporations_by_id_election(self, id_electoral_process: str) -> pd.DataFrame:
         
         try:
             with self.engine.connect() as connection:
-                query_corp = text("""
+                query_corp = text(f"""
                     SELECT c.orden, c.titulo, c.tipo_corporacion 
-                    FROM kits_electorales.corporaciones c
+                    FROM {self.config.schema}.corporaciones c
                     WHERE c.id_proceso_electoral = :id_proceso
                     ORDER BY c.orden
                 """)
@@ -26,15 +28,16 @@ class CandidateDBRepository(CandidateRepository):
         
         except SQLAlchemyError as e:
             print(f"[ERROR] error al consultar las corporaciones: {str(e)}")
+            return pd.DataFrame()
 
     def get_departments_and_cities(self) -> tuple[pd.DataFrame, pd.DataFrame]:
         try:
             with self.engine.connect() as connection:
-                query_departments = """
-                    SELECT * FROM kits_electorales.departamentos
+                query_departments = f"""
+                    SELECT * FROM {self.config.schema}.departamentos
                 """
-                query_cities = """
-                    SELECT * FROM kits_electorales.ciudades
+                query_cities = f"""
+                    SELECT * FROM {self.config.schema}.ciudades
                 """
 
                 df_departments = pd.read_sql(query_departments, connection)
@@ -49,9 +52,9 @@ class CandidateDBRepository(CandidateRepository):
     def get_corporations_by_id(self, id_proceso: str) -> pd.DataFrame:
         try:
             with self.engine.connect() as connection:
-                query_corp = text("""
+                query_corp = text(f"""
                     SELECT c.orden, c.titulo, c.tipo_corporacion 
-                    FROM kits_electorales.corporaciones c
+                    FROM {self.config.schema}.corporaciones c
                     WHERE c.id_proceso_electoral = :id_proceso
                     ORDER BY c.orden
                 """)
