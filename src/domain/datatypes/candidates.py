@@ -1,5 +1,5 @@
 dtype_candidates = {
-    "orden_sorteo": "int32",
+    "orden_candidato": "int32",
     "numero_sorteo": "int16",
     "codigo_departamento": "string",
     "nombre_departamento": "string",

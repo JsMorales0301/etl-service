@@ -1,28 +1,14 @@
-from src.domain.interfaces.rule import Rule
-from typing import Any
 import time
-from .rules.documento_repetido import DocumentoRepetido
-from .rules.doble_militancia import DobleMilitancia
-from .rules.documento_sin_letras import DocumentoSinLetras
-from .rules.cuota_genero import CuotaGenero
-from .rules.nombre_apellido import NombreApellido
-from .rules.generos_permitidos import GenerosPermitidos
-from .rules.nombres_apellidos_mayuscula import NombresApellidosMayusculas
+from typing import Any
+
+from src.domain.interfaces.rule import Rule
+from .rules import all_rules
 
 class CandidatesStrategy:
-
     rules: list[Rule]
 
     def __init__(self):
-        self.rules = [
-            DocumentoRepetido(),
-            DobleMilitancia(),
-            DocumentoSinLetras(),
-            CuotaGenero(),
-            NombreApellido(),
-            GenerosPermitidos(),
-            NombresApellidosMayusculas()
-        ]
+        self.rules = [rule() for rule in all_rules]
 
     def run(self, df, context: dict[str, Any] = None):
         start = time.time()

@@ -8,7 +8,6 @@ class CuotaGenero(Rule[pd.DataFrame]):
     def apply(self, data: pd.DataFrame, context: dict[str, Any] | None = None):
         
         df = data
-        print(context)
         quota = context.get("gender_quota", 30) if context else 30
         percent_quota = quota / 100
 
